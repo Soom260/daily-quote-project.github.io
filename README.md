@@ -105,7 +105,7 @@ python3 main.py --source "https://docs.google.com/.../pub?output=csv"
 
 | 상황 | 나오는 메시지 |
 |---|---|
-| 주소가 없음 | `SHEET_CSV_URL이(가) 비어 있습니다. .env 파일이나 GitHub Secrets에 시트 CSV 주소를 넣으세요.` |
+| 주소가 없음 | `SHEET_CSV_URL이(가) 비어 있습니다. .env 파일이나 GitHub Secrets에 시트 CSV 주소를 넣으세요.` (GitHub에서는 Variable도 됩니다) |
 | 열 이름이 빠짐 | `CSV에 필요한 열이 없습니다: 분류, 링크. 시트 1행의 현재 열: 제목, 내용, 공개` |
 | 공개=Y 행이 없음 | `공개=Y인 행이 없습니다. 검사한 데이터 행 2~14번 가운데 쓸 수 있는 행이 0개입니다.` |
 | 데이터 행이 없음 | `CSV에 데이터 행이 없습니다. 시트 1행에 열 이름만 있습니다.` |
@@ -133,9 +133,13 @@ python3 main.py --date 2026-09-23 --output preview.html
 
 1. Public 저장소 `daily-quote-project`를 만들고, 위 파일을 `main` 브랜치 최상위에 저장합니다.
 2. **Settings → Pages → Build and deployment → Source → GitHub Actions**를 선택합니다. 제공된 워크플로를 사용하므로 추천 Jekyll·Static HTML 템플릿을 추가하지 않습니다.
-3. **Settings → Secrets and variables → Actions → New repository secret**에서 시트 주소를 등록합니다. 이 단계를 빠뜨리면 `build`가 `SHEET_CSV_URL이(가) 비어 있습니다`로 실패합니다.
-   - Name: `SHEET_CSV_URL`
-   - Secret: `.env`에 넣은 것과 같은 CSV 주소
+3. **Settings → Secrets and variables → Actions**에서 시트 주소를 등록합니다. 이 단계를 빠뜨리면 `build`가 `SHEET_CSV_URL이(가) 비어 있습니다`로 실패합니다.
+   - 이름은 어느 쪽이든 **`SHEET_CSV_URL`** 로 똑같이 적습니다.
+   - 값은 `.env`에 넣은 것과 같은 CSV 주소를 **따옴표 없이** 붙여넣습니다.
+   - **Variables 탭 → New repository variable** — 이 예제의 주소는 이미 ‘웹에 게시’된 공개 링크라 이쪽으로 충분합니다. 나중에 값을 눈으로 다시 확인할 수 있습니다.
+   - **Secrets 탭 → New repository secret** — 값을 가려 두고 싶을 때. 한 번 저장하면 다시 볼 수 없습니다.
+   - 워크플로는 `${{ secrets.SHEET_CSV_URL || vars.SHEET_CSV_URL }}`로 **둘 다 지원**합니다. 둘 다 있으면 Secret이 이깁니다.
+   - **Environment secrets/variables에 넣으면 안 됩니다.** `build` 작업은 환경에 속해 있지 않아 값을 받지 못합니다. 반드시 **Repository** 쪽에 넣으세요.
 4. **Actions → Daily Quote Generator → Run workflow**를 엽니다.
 5. 브랜치는 `main`, **`preview_date`는 비워 둔 상태**로 Run workflow를 누릅니다.
 6. 실행 항목을 열어 **`build`와 `deploy`가 모두 초록색**인지 확인합니다. `build`의 `Generate daily page` 로그에는 읽은 문구 개수·선택 날짜·생성 시각이 표시됩니다.
@@ -226,8 +230,9 @@ Git·GitHub CLI(`gh`) 설치·로그인 상태를 확인하고 계정 인증은 
    같은 이름의 저장소가 있거나 기존 홈페이지를 바꾸게 되면 덮어쓰지 말고 알려줘.
    실습안내·활동기록·인증 파일은 올리지 말고 예제 코드만 커밋·Push해줘.
    .env 는 절대 커밋하지 마. .gitignore 에 들어 있는지 먼저 확인해줘.
-4. 내 .env 의 SHEET_CSV_URL 값을 저장소 Secret(이름도 SHEET_CSV_URL)으로 등록하는
-   방법을 알려줘. 값은 화면에 그대로 출력하지 말고, 내가 직접 붙여넣게 안내해줘.
+4. 내 .env 의 SHEET_CSV_URL 값을 저장소 Variable 또는 Secret(이름은 SHEET_CSV_URL)으로
+   등록하는 방법을 알려줘. Environment 가 아니라 Repository 쪽이어야 해.
+   값은 화면에 그대로 출력하지 말고, 내가 직접 붙여넣게 안내해줘.
 5. Pages Source를 GitHub Actions로 설정해줘. 기존 배포 워크플로를 사용하고
    별도의 Jekyll·Static HTML 배포 템플릿을 추가하지 마.
 6. Daily Quote Generator를 main에서 preview_date를 비워 실행해줘.
@@ -255,7 +260,8 @@ preview_date를 비워 다시 실행해 실제 오늘 날짜로 복원해줘.
 |---|---|
 | Daily Quote Generator가 안 보임 | `main`에 `.github/workflows/daily_quote.yml`로 저장했는지 |
 | Configure Pages에서 실패 | Settings → Pages → Source가 GitHub Actions인지 |
-| `SHEET_CSV_URL이(가) 비어 있습니다` | Settings → Secrets에 `SHEET_CSV_URL`을 등록했는지 (이름 철자 확인) |
+| `SHEET_CSV_URL이(가) 비어 있습니다` | **Repository** variables 또는 secrets에 `SHEET_CSV_URL`이 있는지. Environment 쪽에 넣으면 `build`가 못 받습니다 |
+| `CSV 파일을 찾지 못했습니다: "https://…` | 값에 따옴표가 같이 들어갔습니다. 따옴표 빼고 다시 저장 |
 | `필요한 열이 없습니다` | 시트 1행이 `제목, 내용, 분류, 링크, 공개`인지. 로그에 현재 열이 함께 나옵니다 |
 | `공개=Y인 행이 없습니다` | 공개 열에 `Y`를 적은 행이 하나라도 있는지 |
 | `CSV를 내려받지 못했습니다(HTTP …)` | 시트가 ‘웹에 게시’ 상태인지, 주소 끝이 `output=csv`인지 |
