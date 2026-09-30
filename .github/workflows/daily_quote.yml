@@ -36,6 +36,7 @@ jobs:
       - name: Generate daily page
         env:
           PREVIEW_DATE: ${{ inputs.preview_date || '' }}
+          SHEET_CSV_URL: ${{ secrets.SHEET_CSV_URL }}
         run: |
           if [ -n "$PREVIEW_DATE" ]; then
             python main.py --output _site/index.html --date "$PREVIEW_DATE"

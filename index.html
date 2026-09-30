@@ -7,7 +7,7 @@
   <title>오늘의 한 문장</title>
   <style>
     * { box-sizing: border-box; }
-    :root { color-scheme: dark; --accent: #a5b4fc; }
+    :root { color-scheme: dark; --accent: #6ee7b7; }
     body { margin: 0; min-height: 100vh; padding: 42px 22px 30px;
       font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
       background: linear-gradient(135deg, #0f0c29, #302b63, #182235); color: #f1f5f9;
@@ -45,31 +45,157 @@
       .quote-card { padding: 32px 23px 28px; } .quote-text { font-size: 23px; }
       .yesterday { padding: 20px; } .yesterday-quote { font-size: 15px; }
     }
+
+    .browse { text-align: left; background: #ffffff05; border: 1px solid #ffffff14;
+      border-radius: 20px; padding: 26px 28px 24px; margin-bottom: 23px; }
+    .browse-head { display: flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .browse-title { font-size: 15px; font-weight: 650; margin: 0; }
+    .browse-count { font-size: 12px; color: #a8b4c8; margin: 0; }
+    .search-box { margin-bottom: 14px; }
+    .search-box input { width: 100%; padding: 11px 15px; border-radius: 12px;
+      border: 1px solid #ffffff26; background: #0c1022a8; color: #f1f5f9;
+      font-size: 14px; font-family: inherit; }
+    .search-box input::placeholder { color: #8d99ae; }
+    .search-box input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+    .chip { padding: 6px 13px; border-radius: 20px; border: 1px solid #ffffff26;
+      background: #ffffff08; color: #cbd5e1; font-size: 12px; font-family: inherit;
+      cursor: pointer; }
+    .chip:hover { border-color: var(--accent); }
+    .chip.is-on { background: var(--accent); border-color: var(--accent); color: #11152b;
+      font-weight: 650; }
+    .item-list { list-style: none; margin: 0; padding: 0; display: flex;
+      flex-direction: column; gap: 11px; }
+    .item { border: 1px solid #ffffff12; border-radius: 14px; padding: 15px 18px;
+      background: #ffffff04; }
+    .item-title { font-size: 14px; font-weight: 650; margin: 0 0 6px; overflow-wrap: anywhere; }
+    .item-body { font-size: 13px; line-height: 1.7; color: #cbd5e1; margin: 0 0 10px;
+      word-break: keep-all; overflow-wrap: anywhere; }
+    .item-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0; }
+    .item-tag { font-size: 11px; color: var(--accent); border: 1px solid #ffffff1c;
+      border-radius: 20px; padding: 3px 9px; }
+    .item-link { font-size: 11px; color: #a8b4c8; }
+    .empty-note { display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-size: 13px; color: #d8b4fe; margin: 14px 0 0; word-break: keep-all; }
+    .card-title { font-size: 13px; color: #cbd5e1; margin: 0 0 14px; overflow-wrap: anywhere; }
+    .card-link { font-size: 12px; color: #a8b4c8; display: inline-block; margin-top: 10px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    [hidden] { display: none !important; }
+    @media (max-width: 600px) { .browse { padding: 20px 17px 18px; } }
   </style>
 </head>
 <body>
   <main class="container">
     <p class="eyebrow">TODAY IN ONE SENTENCE</p>
     <h1>오늘의 한 문장</h1>
-    <div class="date-badge"><time id="selected-date" datetime="2026-09-22">2026-09-22</time><span class="mode">한국 날짜 기준</span></div>
+    <div class="date-badge"><time id="selected-date" datetime="2026-09-30">2026-09-30</time><span class="mode">한국 날짜 기준</span></div>
     
     <section class="quote-card" aria-label="선택한 날짜의 문구">
-      <span class="quote-mark" aria-hidden="true">“</span>
-      <p class="quote-text" id="today-quote">자동화한 일을 다시 확인하는 습관도 함께 만들자.</p>
+      <p class="card-title">확인한 것과 못 본 것 구분</p>
+      <span class="quote-mark" aria-hidden="true">&ldquo;</span>
+      <p class="quote-text" id="today-quote">직접 본 결과는 근거와 함께, 확인하지 못한 것은 미확인으로 남깁니다.</p>
       <div class="divider" aria-hidden="true"></div>
-      <p class="author">— 수업 예제</p>
-      <p class="topic">자동화</p>
+      <p class="topic">기록</p>
+      
     </section>
     <section class="yesterday" aria-label="전날의 문구">
-      <p class="yesterday-label">어제의 한 문장 · 2026-09-21</p>
-      <p class="yesterday-quote" id="yesterday-quote">좋은 질문은 지금 아는 것과 아직 모르는 것을 나눈다.</p>
-      <p class="yesterday-author">— 수업 예제</p>
+      <p class="yesterday-label">어제의 한 문장 · 2026-09-29</p>
+      <p class="yesterday-quote" id="yesterday-quote">검색 결과가 없을 때 &quot;다른 단어로 찾아보세요&quot;처럼 다음 행동을 알려 줍니다.</p>
+      <p class="yesterday-author">&quot;결과 없음&quot;도 안내하기 · 화면</p>
+    </section>
+    <section class="browse" aria-label="전체 문장 찾아보기">
+      <div class="browse-head">
+        <h2 class="browse-title">전체 문장</h2>
+        <p class="browse-count">보이는 문장 <span id="result-count">11개</span> / 전체 11개</p>
+      </div>
+      <div class="search-box">
+        <label class="sr-only" for="search-input">문장 검색</label>
+        <input type="search" id="search-input" placeholder="제목·내용·분류로 찾기" autocomplete="off">
+      </div>
+      <div class="chips" role="group" aria-label="분류 고르기">
+        <button type="button" class="chip is-on" data-category="">전체</button>
+        <button type="button" class="chip" data-category="Git">Git</button>
+        <button type="button" class="chip" data-category="배포">배포</button>
+        <button type="button" class="chip" data-category="화면">화면</button>
+        <button type="button" class="chip" data-category="기록">기록</button>
+        <button type="button" class="chip" data-category="데이터">데이터</button>
+      </div>
+      <ul class="item-list" id="item-list">
+        <li class="item" data-category="Git" data-search="커밋 메시지는 한 줄 요약부터 무엇을 왜 바꿨는지 첫 줄에 적으면 나중에 기록을 찾기 쉽습니다. git"><p class="item-title">커밋 메시지는 한 줄 요약부터</p><p class="item-body">무엇을 왜 바꿨는지 첫 줄에 적으면 나중에 기록을 찾기 쉽습니다.</p><p class="item-meta"><span class="item-tag">Git</span><a class="item-link" href="https://git-scm.com/docs/git-commit" target="_blank" rel="noopener noreferrer">링크 열기</a></p></li>
+        <li class="item" data-category="Git" data-search="커밋 전에 바뀐 줄 읽기 git diff로 바뀐 줄을 먼저 확인하고 커밋합니다. git"><p class="item-title">커밋 전에 바뀐 줄 읽기</p><p class="item-body">git diff로 바뀐 줄을 먼저 확인하고 커밋합니다.</p><p class="item-meta"><span class="item-tag">Git</span><a class="item-link" href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener noreferrer">링크 열기</a></p></li>
+        <li class="item" data-category="배포" data-search="배포 결과는 공개 주소에서 확인 actions의 deploy 단계 성공과 공개 주소의 새 내용을 함께 봅니다. 배포"><p class="item-title">배포 결과는 공개 주소에서 확인</p><p class="item-body">Actions의 deploy 단계 성공과 공개 주소의 새 내용을 함께 봅니다.</p><p class="item-meta"><span class="item-tag">배포</span><a class="item-link" href="https://docs.github.com/en/pages" target="_blank" rel="noopener noreferrer">링크 열기</a></p></li>
+        <li class="item" data-category="배포" data-search="예약 실행은 utc 기준 cron의 17 23 * * *는 한국시간 다음 날 오전 8시 17분입니다. 배포"><p class="item-title">예약 실행은 UTC 기준</p><p class="item-body">cron의 17 23 * * *는 한국시간 다음 날 오전 8시 17분입니다.</p><p class="item-meta"><span class="item-tag">배포</span><a class="item-link" href="https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule" target="_blank" rel="noopener noreferrer">링크 열기</a></p></li>
+        <li class="item" data-category="Git" data-search="작게 나눠 자주 커밋하기 한 번에 한 가지 변경만 커밋하면 문제가 생겼을 때 되돌리기 쉽습니다. git"><p class="item-title">작게 나눠 자주 커밋하기</p><p class="item-body">한 번에 한 가지 변경만 커밋하면 문제가 생겼을 때 되돌리기 쉽습니다.</p><p class="item-meta"><span class="item-tag">Git</span></p></li>
+        <li class="item" data-category="화면" data-search="&quot;결과 없음&quot;도 안내하기 검색 결과가 없을 때 &quot;다른 단어로 찾아보세요&quot;처럼 다음 행동을 알려 줍니다. 화면"><p class="item-title">&quot;결과 없음&quot;도 안내하기</p><p class="item-body">검색 결과가 없을 때 &quot;다른 단어로 찾아보세요&quot;처럼 다음 행동을 알려 줍니다.</p><p class="item-meta"><span class="item-tag">화면</span></p></li>
+        <li class="item" data-category="기록" data-search="확인한 것과 못 본 것 구분 직접 본 결과는 근거와 함께, 확인하지 못한 것은 미확인으로 남깁니다. 기록"><p class="item-title">확인한 것과 못 본 것 구분</p><p class="item-body">직접 본 결과는 근거와 함께, 확인하지 못한 것은 미확인으로 남깁니다.</p><p class="item-meta"><span class="item-tag">기록</span></p></li>
+        <li class="item" data-category="기록" data-search="readme에 데이터 출처 적기 콘텐츠를 어디서 가져왔는지, 언제 갱신했는지 readme에 남깁니다. 기록"><p class="item-title">README에 데이터 출처 적기</p><p class="item-body">콘텐츠를 어디서 가져왔는지, 언제 갱신했는지 README에 남깁니다.</p><p class="item-meta"><span class="item-tag">기록</span></p></li>
+        <li class="item" data-category="데이터" data-search="시트의 1행은 열 이름 제목, 내용, 분류, 링크, 공개 열 이름을 바꾸면 main.py가 이유를 알리고 멈춥니다. 데이터"><p class="item-title">시트의 1행은 열 이름</p><p class="item-body">제목, 내용, 분류, 링크, 공개 열 이름을 바꾸면 main.py가 이유를 알리고 멈춥니다.</p><p class="item-meta"><span class="item-tag">데이터</span></p></li>
+        <li class="item" data-category="데이터" data-search="공개 열로 초안 숨기기 공개 열에 y를 적은 행만 웹에 나옵니다. 쓰는 중인 행은 n으로 둡니다. 데이터"><p class="item-title">공개 열로 초안 숨기기</p><p class="item-body">공개 열에 Y를 적은 행만 웹에 나옵니다. 쓰는 중인 행은 N으로 둡니다.</p><p class="item-meta"><span class="item-tag">데이터</span></p></li>
+        <li class="item" data-category="데이터" data-search="뭘 써야하지 업데이트도 해봅니다. 데이터"><p class="item-title">뭘 써야하지</p><p class="item-body">업데이트도 해봅니다.</p><p class="item-meta"><span class="item-tag">데이터</span></p></li>
+      </ul>
+      <p class="empty-note" id="empty-note" hidden>
+        <span id="empty-text">찾는 문장이 없습니다.</span>
+        <button type="button" class="chip" id="reset-button">검색 지우기</button>
+      </p>
     </section>
     <footer>
-      <p class="generated">마지막 생성 <time id="generated-at" datetime="2026-09-22T17:22:35+09:00">2026.09.22 17:22:35 KST</time></p>
+      <p class="generated">마지막 생성 <time id="generated-at" datetime="2026-09-30T16:11:38+09:00">2026.09.30 16:11:38 KST</time></p>
       <p id="build-info">로컬 생성본</p>
       <p>하루 한 문장, 배움과 협업을 위한 수업 예제</p>
     </footer>
   </main>
+  <script>
+
+  (function () {
+    var input = document.getElementById('search-input');
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chips .chip'));
+    var items = Array.prototype.slice.call(document.querySelectorAll('.item'));
+    var note = document.getElementById('empty-note');
+    var noteText = document.getElementById('empty-text');
+    var countLabel = document.getElementById('result-count');
+    var resetButton = document.getElementById('reset-button');
+    var category = '';
+
+    function apply() {
+      var typed = input.value.trim();
+      var word = typed.toLowerCase();
+      var shown = 0;
+      items.forEach(function (item) {
+        var wordOk = word === '' || item.dataset.search.indexOf(word) !== -1;
+        var categoryOk = category === '' || item.dataset.category === category;
+        var show = wordOk && categoryOk;
+        item.hidden = !show;
+        if (show) { shown += 1; }
+      });
+      countLabel.textContent = shown + '\uAC1C';
+      note.hidden = shown !== 0;
+      if (shown === 0) {
+        if (typed !== '') {
+          noteText.textContent = '\u2018' + typed + '\u2019\uC5D0 \uB9DE\uB294 \uBB38\uC7A5\uC774 \uC5C6\uC2B5\uB2C8\uB2E4. \uB2E4\uB978 \uB9D0\uB85C \uCC3E\uC544\uBCF4\uC138\uC694.';
+        } else {
+          noteText.textContent = '\u2018' + category + '\u2019 \uBD84\uB958\uC5D0 \uD574\uB2F9\uD558\uB294 \uBB38\uC7A5\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.';
+        }
+      }
+    }
+
+    input.addEventListener('input', apply);
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        category = chip.dataset.category;
+        chips.forEach(function (other) { other.classList.toggle('is-on', other === chip); });
+        apply();
+      });
+    });
+    resetButton.addEventListener('click', function () {
+      input.value = '';
+      category = '';
+      chips.forEach(function (chip) { chip.classList.toggle('is-on', chip.dataset.category === ''); });
+      apply();
+      input.focus();
+    });
+    apply();
+  })();
+  </script>
 </body>
 </html>
